@@ -4,3 +4,8 @@ WORKDIR /app
 
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
+
+COPY plants_manager plants_manager
+
+ENV PYTHONPATH "${PYTHONPATH}:/app"
+CMD [ "python", "plants_manager/main.py"]
