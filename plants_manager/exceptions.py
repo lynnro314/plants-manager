@@ -1,7 +1,7 @@
 import json
 # from plants_manager.main import app
 from werkzeug.exceptions import HTTPException
-from plants_manager.model import TABLE_PARAMS, MANDATORY_PARAMS
+from plants_manager.model import OPTIONAL_PARAMS, MANDATORY_PARAMS
 
 class PlantsBaseException(HTTPException):
     pass
@@ -19,8 +19,9 @@ class WrongPlantParameters(PlantsBaseException):
     code = 400
 
     def __init__(self):
+        params_list = ', '.join(OPTIONAL_PARAMS)
         description =  'Request has one or more wrong parameters. ' \
-               'The relevant parameters are: ' + ', '.join(TABLE_PARAMS)
+               'The relevant parameters are: %s' % params_list
         super(PlantsBaseException, self).__init__(description)
 
 
@@ -28,16 +29,9 @@ class MissingKeyParameters(PlantsBaseException):
     code = 400
 
     def __init__(self):
+        params_list = ', '.join(MANDATORY_PARAMS)
         description =  'Missing mandatory parameter. ' \
-           'All records should have the parameters: ' + ', '.join(MANDATORY_PARAMS)
-        super(PlantsBaseException, self).__init__(description)
-
-
-class WrongNameException(PlantsBaseException):
-    code = 400
-
-    def __init__(self, name):
-        description =  'Can not rename an existing plant. The name should be %s.' %name
+           'All records should have the parameters: %s' % params_list
         super(PlantsBaseException, self).__init__(description)
 
 
