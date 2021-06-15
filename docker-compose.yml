@@ -1,7 +1,10 @@
 version: '3'
 services:
   plants-manager:
-    image: plants_manager:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.plants-manager
+    image: plants-manager:latest
     container_name: plants-manager
     environment:
       MONGODB_HOSTNAME: mongodb
@@ -9,10 +12,13 @@ services:
       MONGODB_PASSWORD: rootpassword
       MONGODB_DATABASE: plantsdb
       COLLECTION_NAME: plants
+    expose:
+      - 5576
     depends_on:
       - mongodb
     networks:
       - backend
+
   mongodb:
     image: mongo:4.0.8
     container_name: mongodb

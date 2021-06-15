@@ -1,9 +1,10 @@
 import logging
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from plants_manager import controller
 from plants_manager.exceptions import PlantsBaseException, handle_exception
 
 app = Flask(__name__)
+app.register_error_handler(PlantsBaseException, handle_exception)
 logging.basicConfig(level=logging.INFO)
 
 
@@ -17,7 +18,8 @@ def create_plant():
 @app.route('/v1/plants', methods=['GET'])
 def list_plants():
     plants = controller.list_plants()
-    return plants, 200
+    response = jsonify(plants)
+    return response, 200
 
 @app.route('/v1/plants/<name>', methods=['GET'])
 def get_plant(name):
@@ -35,12 +37,3 @@ def update_plant(name):
 def delete_plant(name):
     deleted_plant = controller.delete_plant(name)
     return deleted_plant, 201
-
-
-def main():
-    app.register_error_handler(PlantsBaseException, handle_exception)
-    app.run('0.0.0.0', port=1576)
-
-
-if __name__ == '__main__':
-    main()
